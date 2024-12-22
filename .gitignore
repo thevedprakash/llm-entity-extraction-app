@@ -1,0 +1,96 @@
+.ipynb_checkpoints
+__pycache__
+.DS_Store
+
+
+eval "$(/opt/homebrew/bin/brew shellenv)"
+git init
+git remote add origin https://github.com/thevedprakash/llm-entity-extraction-app.git
+# git remote set-url origin https://github.com/thevedprakash/llm-entity-extraction-app.git
+git remote -v
+git add .
+git commit -m "Initial commit with all project files"
+git branch -M master
+git push -u origin master
+
+E.g.
+```
+(base) ved@Prakashs-MacBook-Pro entity-extraction 2 % git remote add origin https://github.com/thevedprakash/llm-entity-extraction-app.git
+error: remote origin already exists.
+(base) ved@Prakashs-MacBook-Pro entity-extraction 2 % tree .
+.
+├── Dockerfile
+├── app.py
+├── logs
+│   └── logfile_2024-12-19_10-13-22.log
+├── models
+│   └── mistralai
+├── notebooks
+│   └── Untitled.ipynb
+├── outputs
+├── requirements.txt
+├── src
+│   ├── __init__.py
+│   ├── checker.py
+│   ├── entity_extraction.py
+│   ├── guardrails.py
+│   ├── model_loader.py
+│   ├── pdf_processor.py
+│   └── prompts.py
+├── static
+│   ├── index.html
+│   ├── main.css
+│   └── script.js
+├── templates
+└── uploads
+
+10 directories, 15 files
+(base) ved@Prakashs-MacBook-Pro entity-extraction 2 % git remote -v
+
+origin  https://github.com/thevedprakash/PMConnectAI.git (fetch)
+origin  https://github.com/thevedprakash/PMConnectAI.git (push)
+(base) ved@Prakashs-MacBook-Pro entity-extraction 2 % git remote set-url origin https://github.com/thevedprakash/llm-entity-extraction-app.git
+
+(base) ved@Prakashs-MacBook-Pro entity-extraction 2 % git remote -v                                                                           
+
+origin  https://github.com/thevedprakash/llm-entity-extraction-app.git (fetch)
+origin  https://github.com/thevedprakash/llm-entity-extraction-app.git (push)
+(base) ved@Prakashs-MacBook-Pro entity-extraction 2 % git add .
+git commit -m "Initial commit with all project files"
+
+[master 7655096] Initial commit with all project files
+ 19 files changed, 887 insertions(+)
+ create mode 100644 Downloads/entity-extraction 2/.DS_Store
+ create mode 100644 Downloads/entity-extraction 2/.gitignore
+ create mode 100644 Downloads/entity-extraction 2/Dockerfile
+ create mode 100644 Downloads/entity-extraction 2/app.py
+ create mode 100644 Downloads/entity-extraction 2/logs/logfile_2024-12-19_10-13-22.log
+ create mode 100644 Downloads/entity-extraction 2/models/.DS_Store
+ create mode 100644 Downloads/entity-extraction 2/notebooks/Untitled.ipynb
+ create mode 100644 Downloads/entity-extraction 2/requirements.txt
+ create mode 100644 Downloads/entity-extraction 2/src/.DS_Store
+ create mode 100644 Downloads/entity-extraction 2/src/__init__.py
+ create mode 100644 Downloads/entity-extraction 2/src/checker.py
+ create mode 100644 Downloads/entity-extraction 2/src/entity_extraction.py
+ create mode 100644 Downloads/entity-extraction 2/src/guardrails.py
+ create mode 100644 Downloads/entity-extraction 2/src/model_loader.py
+ create mode 100644 Downloads/entity-extraction 2/src/pdf_processor.py
+ create mode 100644 Downloads/entity-extraction 2/src/prompts.py
+ create mode 100644 Downloads/entity-extraction 2/static/index.html
+ create mode 100644 Downloads/entity-extraction 2/static/main.css
+ create mode 100644 Downloads/entity-extraction 2/static/script.js
+(base) ved@Prakashs-MacBook-Pro entity-extraction 2 % git branch -M master
+git push -u origin master
+
+Enumerating objects: 28, done.
+Counting objects: 100% (28/28), done.
+Delta compression using up to 12 threads
+Compressing objects: 100% (21/21), done.
+Writing objects: 100% (28/28), 11.92 KiB | 11.92 MiB/s, done.
+Total 28 (delta 2), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (2/2), done.
+To https://github.com/thevedprakash/llm-entity-extraction-app.git
+ * [new branch]      master -> master
+branch 'master' set up to track 'origin/master'.
+(base) ved@Prakashs-MacBook-Pro entity-extraction 2 % 
+```

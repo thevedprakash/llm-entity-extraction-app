@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload App</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to bottom right, #e0f7fa, #80deea);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        /* Colors and Design Tokens */
+        :root {
+            --primary-color: #26c6da;
+            --primary-hover: #00acc1;
+            --neutral-light: #f8f9fa;
+            --text-color: #333;
+            --shadow-light: rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 32px;
+        }
+
+        /* Utility Classes */
+        .centered {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card {
+            background: #fff;
+            padding: var(--spacing-lg);
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 6px var(--shadow-light);
+        }
+
+        /* Typography */
+        h1,
+        h2,
+        h3 {
+            font-weight: 700;
+            margin-bottom: var(--spacing-md);
+        }
+
+        p {
+            font-size: 14px;
+            color: var(--text-color);
+        }
+
+        button {
+            background: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: var(--primary-hover);
+        }
+
+        /* Login Page */
+        .login-container {
+            height: 100vh;
+        }
+
+        .login-card {
+            width: 350px;
+            text-align: center;
+        }
+
+        .login-card input {
+            width: 100%;
+            padding: 10px;
+            margin: var(--spacing-sm) 0;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+        }
+
+        /* Dashboard */
+        .dashboard {
+            max-width: 1200px;
+            margin: var(--spacing-lg) auto;
+        }
+
+        .tabs {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .tab {
+            padding: var(--spacing-sm) var(--spacing-md);
+            background: var(--neutral-light);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .tab:hover {
+            background: var(--primary-hover);
+            color: white;
+        }
+
+        .tab.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--primary-color);
+            padding: var(--spacing-lg);
+            text-align: center;
+            cursor: pointer;
+            margin: var(--spacing-md) 0;
+            border-radius: var(--border-radius);
+            position: relative;
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            color: var(--primary-color);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .file-support {
+            display: flex;
+            justify-content: space-between;
+            margin-top: var(--spacing-sm);
+            font-size: 12px;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+
+        .results-container {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-lg);
+            height: 600px;
+        }
+
+        .file-list-container {
+            width: 25%;
+            background: #fff;
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 4px var(--shadow-light);
+            overflow-y: auto;
+        }
+
+        .file-preview-container {
+            flex: 1;
+            background: #fff;
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 4px var(--shadow-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .file-preview-container .file-preview {
+            height: 100%;
+            width: 100%;
+        }
+
+        .file-list {
+            list-style: none;
+        }
+
+        .file-list li {
+            display: flex;
+            align-items: center;
+            margin-bottom: var(--spacing-sm);
+            padding: var(--spacing-sm);
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+        }
+
+        .file-list li:hover {
+            background: var(--neutral-light);
+        }
+
+        .file-preview img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .file-preview iframe {
+            min-width: 100%;
+            min-height: 100%;
+        }
+
+        .file-list input[type="checkbox"] {
+            margin-right: var(--spacing-sm);
+        }
+
+        .file-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: var(--spacing-md);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Login Page -->
+    <div class="login-container centered">
+        <div class="login-card card">
+            <h1>Login</h1>
+            <input type="text" placeholder="Username">
+            <input type="password" placeholder="Password">
+            <button onclick="login()">Login</button>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="dashboard" style="display:none;">
+        <h1>Welcome to File Upload</h1>
+
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab(1)">Scope 1</div>
+            <div class="tab" onclick="switchTab(2)">Scope 2</div>
+            <div class="tab" onclick="switchTab(3)">Scope 3</div>
+        </div>
+
+        <div class="upload-area" onclick="document.getElementById('file-input').click()">
+            <div class="upload-icon">📁 <button>Add Files</button></div>
+
+            <p>Drag & Drop files here or click to upload</p>
+            <div class="file-support">
+                <span>Max File Size: 5 MB</span>
+                <span>Supported Files: PDF, JPG, PNG</span>
+            </div>
+        </div>
+        <input type="file" id="file-input" style="display:none;" multiple accept=".jpg,.png,.pdf"
+            onchange="handleFileInput(event)">
+
+        <div class="results-container">
+            <div class="file-list-container">
+                <div class="file-actions">
+                    <h3>Uploaded Files</h3>
+                    <button onclick="deleteSelectedFiles()">Delete</button>
+                </div>
+                <ul class="file-list" id="file-list"></ul>
+            </div>
+            <div class="file-preview-container">
+                <div class="file-preview" id="file-preview">
+                    <p>No file selected for preview</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Add Button Below Dashboard -->
+    <div class="centered" style="margin-top: var(--spacing-md);">
+        <button id="extract-entities-btn" onclick="openExtractedEntitiesWindow()">Show Extracted Entities</button>
+    </div>
+
+    <!-- Modal Window for Extracted Entities -->
+    <div id="entities-modal"
+        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000;">
+        <div
+            style="background:white; padding:var(--spacing-lg); margin:var(--spacing-lg) auto; border-radius:var(--border-radius); max-width:90%; height:90%; box-shadow: 0 4px 6px var(--shadow-light);">
+            <h2>Extracted Entities</h2>
+            <div class="results-container" style="gap: var(--spacing-lg);">
+                <!-- File Names -->
+                <div class="file-list-container" style="width: 20%;">
+                    <h3>File Names</h3>
+                    <ul id="modal-file-list" class="file-list"></ul>
+                </div>
+
+                <!-- File Preview -->
+                <div class="file-preview-container" style="flex: 1;">
+                    <h3>File Preview</h3>
+                    <div id="modal-file-preview" class="file-preview">
+                        <p>No file selected for preview</p>
+                    </div>
+                </div>
+
+                <!-- Extracted Entities -->
+                <div class="file-preview-container" style="flex: 1; overflow-y:auto;">
+                    <h3>Extracted Entities</h3>
+                    <div id="modal-entities-form">
+                        <p>Select a file to view extracted entities</p>
+                    </div>
+                </div>
+            </div>
+            <button style="margin-top: var(--spacing-md);" onclick="closeExtractedEntitiesWindow()">Close</button>
+        </div>
+    </div>
+
+    <script>
+
+        const scopeFiles = { scope1: [], scope2: [], scope3: [] };
+        let activeScope = 'scope1';
+
+        let uploadedFiles = [];
+
+        function login() {
+            document.querySelector('.login-container').style.display = 'none';
+            document.querySelector('.dashboard').style.display = 'block';
+        }
+
+        function switchTab(scopeNumber) {
+            activeScope = `scope${scopeNumber}`;
+            document.querySelectorAll('.tab').forEach((tab, index) => {
+                tab.classList.toggle('active', index + 1 === scopeNumber);
+            });
+            renderFileList();
+            clearPreviewIfNoFiles();
+        }
+
+        function clearPreviewIfNoFiles() {
+            const previewContainer = document.getElementById('file-preview');
+            const currentFiles = scopeFiles[activeScope];
+            if (currentFiles.length === 0) {
+                previewContainer.innerHTML = '<p>No file selected for preview</p>';
+            }
+        }
+
+
+        function handleFileInput(event) {
+            const files = Array.from(event.target.files);
+            scopeFiles[activeScope].push(...files);
+            renderFileList();
+        }
+
+        function renderFileList() {
+            const fileList = document.getElementById('file-list');
+            fileList.innerHTML = '';
+            scopeFiles[activeScope].forEach((file, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `<input type="checkbox" data-index="${index}"> ${file.name}`;
+                li.onclick = (e) => { if (!e.target.type) previewFile(file); };
+                fileList.appendChild(li);
+            });
+        }
+
+        // function renderFileList() {
+        //     const fileList = document.getElementById('file-list');
+        //     fileList.innerHTML = '';
+        //     scopeFiles[activeScope].forEach((file, index) => {
+        //         const li = document.createElement('li');
+        //         li.textContent = `${file.name}`;
+        //         li.onclick = () => previewFile(file);
+        //         fileList.appendChild(li);
+        //     });
+        // }
+
+        function deleteSelectedFiles() {
+            const checkboxes = document.querySelectorAll('.file-list input[type="checkbox"]:checked');
+            const indexes = Array.from(checkboxes).map(cb => parseInt(cb.dataset.index)).sort((a, b) => b - a);
+            indexes.forEach(index => scopeFiles[activeScope].splice(index, 1));
+            renderFileList();
+            document.getElementById('file-preview').innerHTML = '<p>No file selected for preview</p>';
+        }
+
+        function previewFile(file) {
+            const previewContainer = document.getElementById('file-preview');
+            previewContainer.innerHTML = '';
+
+            const fileType = file.type;
+            if (fileType.includes('image')) {
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                previewContainer.appendChild(img);
+            } else if (fileType.includes('pdf')) {
+                const iframe = document.createElement('iframe');
+                iframe.src = URL.createObjectURL(file);
+                iframe.width = '100%';
+                iframe.height = '100%';
+                previewContainer.appendChild(iframe);
+            } else {
+                previewContainer.innerHTML = '<p>File type not supported for preview</p>';
+            }
+        }
+
+
+        // Simulated API Response for Extracted Entities Based on Scope
+        // Simulated API Response for Extracted Entities Based on Scope
+        function fetchExtractedEntities(scope, fileName) {
+            const allDummyData = {
+                scope1: {
+                    Country: "USA",
+                    Year: "2023",
+                    Month: "August",
+                    "Fuel type": "Diesel",
+                    "Fuel Quantity (units)": "500",
+                    "Total Cost (currency)": "$1000"
+                },
+                scope2: {
+                    Country: "India",
+                    Year: "2023",
+                    Month: "July",
+                    "Total electricity (in Kwh)": "1500",
+                    "Total Cost (in currency)": "$300"
+                },
+                scope3: {
+                    "No. of passenger": "200",
+                    "Air Travel Time": "5 hours",
+                    "Distance traveled (in miles)": "1500",
+                    Class: "Business",
+                    "Origin airport/ IATA code": "JFK",
+                    "Destination airport/ IATA code": "LAX"
+                }
+            };
+
+            // Return filtered fields based on the active scope
+            return allDummyData[scope] || {};
+        }
+
+
+        // Open Modal to Display Extracted Entities
+        function openExtractedEntitiesWindow() {
+            const modal = document.getElementById('entities-modal');
+            const fileList = document.getElementById('modal-file-list');
+            fileList.innerHTML = '';
+            const files = scopeFiles[activeScope];
+            files.forEach((file, index) => {
+                const li = document.createElement('li');
+                li.textContent = file.name;
+                li.style.cursor = 'pointer';
+                li.onclick = () => showExtractedEntities(file);
+                fileList.appendChild(li);
+            });
+            modal.style.display = 'block';
+        }
+
+        // Display File Preview and Extracted Entities Based on Scope
+
+        function showExtractedEntities(file) {
+            const previewContainer = document.getElementById('modal-file-preview');
+            const entitiesContainer = document.getElementById('modal-entities-form');
+            previewContainer.innerHTML = '';
+
+            // Display Scope Indicator
+            const scopeTitle = `<h3 style="color: var(--primary-color);">Current Scope: ${activeScope.replace('scope', 'Scope ')}</h3>`;
+            entitiesContainer.innerHTML = scopeTitle;
+
+            // File Preview
+            const fileType = file.type;
+            if (fileType.includes('image')) {
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                previewContainer.appendChild(img);
+            } else if (fileType.includes('pdf')) {
+                const iframe = document.createElement('iframe');
+                iframe.src = URL.createObjectURL(file);
+                iframe.width = '100%';
+                iframe.height = '100%';
+                previewContainer.appendChild(iframe);
+            } else {
+                previewContainer.innerHTML = '<p>File type not supported for preview</p>';
+            }
+
+            // Extracted Entities Based on Active Scope
+            const entities = fetchExtractedEntities(activeScope, file.name);
+            const entityFields = Object.keys(entities).map(key => `
+        <div style="margin-bottom: var(--spacing-sm);">
+            <label style="font-weight: 600;">${key}:</label>
+            <input type="text" value="${entities[key]}" readonly style="width: 100%; padding: 5px; margin-top: 5px;">
+        </div>
+    `).join('');
+
+            entitiesContainer.innerHTML += entityFields; // Append fields after scope indicator
+        }
+
+
+        // Close Modal Window
+        function closeExtractedEntitiesWindow() {
+            document.getElementById('entities-modal').style.display = 'none';
+        }
+
+    </script>
+</body>
+
+</html>
