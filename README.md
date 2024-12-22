@@ -1,3 +1,4 @@
+```
 project/
 │
 ├── app.py                        # FastAPI main application entry
@@ -14,3 +15,4 @@ project/
 │   └── script.js                 # JavaScript to interact with API
 │
 └── templates/                    # For any optional templating if needed
+```
